@@ -30,4 +30,4 @@ const facilitySchema = new Schema<TFacility>({
     timestamps: true 
 });
 
-export const Facility = model<TFacility>('User', facilitySchema);
+export const Facility = model<TFacility>('Facility', facilitySchema);
