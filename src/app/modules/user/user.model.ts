@@ -4,7 +4,7 @@ import { TUser } from "./user.interface";
 
 
 // Define the User schema
-const userSchema = new Schema({
+const userSchema = new Schema<TUser>({
     name: {
         type: String,
         required: true,
@@ -35,7 +35,11 @@ const userSchema = new Schema({
         type: String,
         required: true,
         trim: true
-    }
+    },
+    isDeleted:{
+        type: Boolean,
+        default: false,
+      },
 }, {
     timestamps: true 
 })
