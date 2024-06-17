@@ -10,9 +10,21 @@ const updateFacilityIntoDB = async (
   payLoad: Partial<TFacility>,
 ) => {
   const { ...updateData } = payLoad;
-  console.log(id, updateData);
+  
 
   const result = await Facility.findOneAndUpdate({ _id: id }, updateData, {
+    new: true,
+    runValidators: true,
+    upsert: true,
+  });
+  return result;
+};
+const deleteFacilityIntoDB = async (
+  id: string,
+) => {
+  
+
+  const result = await Facility.findOneAndUpdate({ _id: id },{isDeleted:true},{
     new: true,
     runValidators: true,
     upsert: true,
@@ -22,4 +34,5 @@ const updateFacilityIntoDB = async (
 export const FacalityServices = {
   creatFacilityIntoDB,
   updateFacilityIntoDB,
+  deleteFacilityIntoDB
 };

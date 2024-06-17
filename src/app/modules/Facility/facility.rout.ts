@@ -18,5 +18,10 @@ rout.put(
   valideteRequest(facilityUpdatedValidationSchema),
   FacilityControler.updateFacility,
 );
+rout.delete(
+    '/:id',
+    auth('admin'),
+    FacilityControler.deleteFacility,
+  );
 
 export const FacilityRoutes = rout;

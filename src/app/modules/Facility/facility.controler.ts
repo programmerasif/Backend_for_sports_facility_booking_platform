@@ -26,8 +26,21 @@ const updateFacility = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const deleteFacility = catchAsync(async (req, res) => {
+  const {id} = req.params
+  
+  const result = await FacalityServices.deleteFacilityIntoDB(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Updated outdoor tennis court with synthetic surface.',
+    data: result,
+  });
+});
 
 export const FacilityControler = {
   creatFacility,
-  updateFacility
+  updateFacility,
+  deleteFacility
 };
