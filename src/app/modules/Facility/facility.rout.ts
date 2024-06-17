@@ -23,5 +23,9 @@ rout.delete(
     auth('admin'),
     FacilityControler.deleteFacility,
   );
+rout.get(
+    '/',
+    FacilityControler.getAllFacility,
+  );
 
 export const FacilityRoutes = rout;

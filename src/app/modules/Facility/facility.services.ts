@@ -31,8 +31,14 @@ const deleteFacilityIntoDB = async (
   });
   return result;
 };
+
+const getAllFacilityIntoDB = async () => {
+  const result = await Facility.find();
+  return result;
+};
 export const FacalityServices = {
   creatFacilityIntoDB,
   updateFacilityIntoDB,
-  deleteFacilityIntoDB
+  deleteFacilityIntoDB,
+  getAllFacilityIntoDB
 };
