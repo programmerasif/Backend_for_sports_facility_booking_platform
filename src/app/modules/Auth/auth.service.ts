@@ -2,6 +2,8 @@ import httpStatus from 'http-status';
 import AppError from '../../errors/appError';
 import { User } from '../user/user.model';
 import { TLoginUser } from './auth.interface';
+import jwt from 'jsonwebtoken'
+import config from '../../config';
 
 const loginUser = async (payLoad: TLoginUser) => {
   const { email, password } = payLoad;
@@ -24,17 +26,17 @@ const loginUser = async (payLoad: TLoginUser) => {
   if (user.password !== password) {
     throw new AppError(httpStatus.FORBIDDEN, 'Password do not matched');
   }
-  // const jwtPayload = {
-  //   id: user?.id,
-  //   role: user?.role,
-  // };
-  // const accesToken = jwt.sign(jwtPayload, config.JWT_ACCESS_SECRATE as string, {
-  //   expiresIn: 60 * 60,
-  // });
+  const jwtPayload = {
+    email: user?.email,
+    role: user?.role,
+  };
+  const accesToken = jwt.sign(jwtPayload, config.JWT_ACCESS_SECRATE as string, {
+    expiresIn: "20d",
+  });
 
   return {
     //   needsPasswordChange:user?.needsPasswordChange,
-    //   accesToken
+      accesToken
   };
 };
 

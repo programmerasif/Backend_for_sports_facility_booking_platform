@@ -1,31 +1,38 @@
 import { NextFunction, Request, Response } from 'express';
 
 import httpStatus from 'http-status';
-import jwt, { JwtPayload } from 'jsonwebtoken'
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import catchAsync from '../utils/catchAsync';
 import AppError from '../errors/appError';
+import config from '../config';
+import { TRole } from '../modules/user/user.interface';
 
-const auth = (...requerdRoles: TUserRole[]) => {
+const auth = (...requerdRoles: TRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-   const authorization = req.headers.authorization
-   const token = authorization;
+    const authorization = req.headers.authorization;
+    const token = authorization;
 
-   if (!token ) {
-    throw new AppError(httpStatus.UNAUTHORIZED,'Unauthorized Access')
-   }
-
-jwt.verify(token,config.JWT_ACCESS_SECRATE as string, function(err, decoded) {
-    if (err) {
-        throw new AppError(httpStatus.UNAUTHORIZED,'Unauthorized Access')
+    if (!token) {
+      throw new AppError(httpStatus.UNAUTHORIZED, 'Unauthorized Access1');
     }
 
-    const role = (decoded as JwtPayload).role
-   if (requerdRoles && !requerdRoles.includes(role)) {
-    throw new AppError(httpStatus.UNAUTHORIZED,'Unauthorized Access')
-   }
-    req.user = decoded as JwtPayload
+    jwt.verify(
+      token,
+      config.JWT_ACCESS_SECRATE as string,
+      function (err, decoded) {
+        if (err) {
+          throw new AppError(httpStatus.UNAUTHORIZED, 'Unauthorized Access2');
+        }
+
+          const role = (decoded as JwtPayload).role
+         if (requerdRoles && !requerdRoles.includes(role)) {
+          throw new AppError(httpStatus.UNAUTHORIZED,'Unauthorized Access')
+         }
+        req.user = decoded as JwtPayload;
+        console.log(req.user);
+      },
+    );
+    next();
   });
-   next()
-  })
 };
 export default auth;
