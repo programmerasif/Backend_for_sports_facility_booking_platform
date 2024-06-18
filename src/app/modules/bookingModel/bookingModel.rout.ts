@@ -7,12 +7,13 @@ import { bookingValidationSchema } from './bookingModel.validation';
 const rout = express.Router();
 
 rout.get('/check-availability', checkAvailabilityControler.checkAvailability);
-rout.post('/bookings',
-     auth('user'), 
-     valideteRequest(bookingValidationSchema),
-     checkAvailabilityControler.creatBookings);
+rout.post(
+  '/bookings',
+  auth('user'),
+  valideteRequest(bookingValidationSchema),
+  checkAvailabilityControler.creatBookings,
+);
 
-rout.get('/bookings',
-     checkAvailabilityControler.getAllBookings);
+rout.get('/bookings', auth('admin'), checkAvailabilityControler.getAllBookings);
 
 export const ChackAvailityRoutes = rout;

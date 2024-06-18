@@ -3,6 +3,16 @@ import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { checkAvailabiitySercices } from './bookingModel.service';
 
+const getAllBookings = catchAsync(async (req, res) => {
+  const result = await checkAvailabiitySercices.getAllBookingsIntoDB();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Bookings retrieved successfully',
+    data: result,
+  });
+});
+
 const checkAvailability = catchAsync(async (req, res) => {
   let { date } = req.query;
   const result = await checkAvailabiitySercices.checkAvailabilTimeIntoDB(date);
@@ -31,4 +41,5 @@ const creatBookings = catchAsync(async (req, res) => {
 export const checkAvailabilityControler = {
   checkAvailability,
   creatBookings,
+  getAllBookings,
 };

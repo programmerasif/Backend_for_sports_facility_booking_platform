@@ -13,7 +13,7 @@ const auth = (...requerdRoles: TRole[]) => {
     const token = authorization;
 
     if (!token) {
-      throw new AppError(httpStatus.UNAUTHORIZED, 'Unauthorized Access1');
+      throw new AppError(httpStatus.UNAUTHORIZED, 'You have no access to this route');
     }
 
     jwt.verify(
@@ -21,12 +21,12 @@ const auth = (...requerdRoles: TRole[]) => {
       config.JWT_ACCESS_SECRATE as string,
       function (err, decoded) {
         if (err) {
-          throw new AppError(httpStatus.UNAUTHORIZED, 'Unauthorized Access2');
+          throw new AppError(httpStatus.UNAUTHORIZED, 'You have no access to this route');
         }
 
           const role = (decoded as JwtPayload).role
          if (requerdRoles && !requerdRoles.includes(role)) {
-          throw new AppError(httpStatus.UNAUTHORIZED,'Unauthorized Access')
+          throw new AppError(httpStatus.UNAUTHORIZED,'You have no access to this route')
          }
         req.user = decoded as JwtPayload;
         console.log(req.user);

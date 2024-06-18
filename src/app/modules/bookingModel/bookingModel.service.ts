@@ -6,6 +6,12 @@ import { User } from '../user/user.model';
 import { Booking } from './bookingModel.model';
 import { JwtPayload } from 'jsonwebtoken';
 
+const getAllBookingsIntoDB = async () => {
+  
+const result = await Booking.find().populate('user').populate('facility')
+  
+  return result
+};
 const checkAvailabilTimeIntoDB = async (payLoad: any) => {
   let date = payLoad;
 
@@ -58,4 +64,5 @@ const creatBookingsIntoDB = async (payLoad: any, userData: JwtPayload) => {
 export const checkAvailabiitySercices = {
   checkAvailabilTimeIntoDB,
   creatBookingsIntoDB,
+  getAllBookingsIntoDB
 };
