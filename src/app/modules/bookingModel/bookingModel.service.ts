@@ -7,17 +7,15 @@ import { Booking } from './bookingModel.model';
 import { JwtPayload } from 'jsonwebtoken';
 
 const getAllBookingsIntoDB = async () => {
-  
-const result = await Booking.find().populate('user').populate('facility')
-  
-  return result
+  const result = await Booking.find().populate('user').populate('facility');
+
+  return result;
 };
 const checkAvailabilTimeIntoDB = async (payLoad: any) => {
   let date = payLoad;
 
   if (!date) {
     date = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
-    console.log(date);
   }
 
   const isTimeAvailable = await checkAvailability(date);
@@ -45,7 +43,6 @@ const creatBookingsIntoDB = async (payLoad: any, userData: JwtPayload) => {
   const durationHours =
     (endDateTime.getTime() - startDateTime.getTime()) / (1000 * 60 * 60);
   const payableAmount = durationHours * facilityDetails.pricePerHour;
-  console.log(payableAmount);
 
   const bookingData = {
     facility,
@@ -60,9 +57,18 @@ const creatBookingsIntoDB = async (payLoad: any, userData: JwtPayload) => {
   const result = await Booking.create(bookingData);
   return result;
 };
+const viewBookingsByUserIntoDB = async (userData: JwtPayload) => {
+
+  const user = await User.findOne({ email: userData.email });
+  const _id = user?._id?.toHexString();
+
+  const allBookings = await Booking.find({ user: _id }).populate('facility');
+  return allBookings;
+};
 
 export const checkAvailabiitySercices = {
   checkAvailabilTimeIntoDB,
   creatBookingsIntoDB,
-  getAllBookingsIntoDB
+  getAllBookingsIntoDB,
+  viewBookingsByUserIntoDB,
 };

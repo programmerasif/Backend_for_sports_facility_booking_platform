@@ -15,5 +15,10 @@ rout.post(
 );
 
 rout.get('/bookings', auth('admin'), checkAvailabilityControler.getAllBookings);
+rout.get(
+    '/bookings/user',
+    auth('user'),
+    checkAvailabilityControler.viewBookingsByUser,
+  );
 
 export const ChackAvailityRoutes = rout;

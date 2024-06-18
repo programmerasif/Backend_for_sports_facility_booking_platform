@@ -23,6 +23,18 @@ const checkAvailability = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const viewBookingsByUser = catchAsync(async (req, res) => {
+  const user = req.user;
+console.log(user);
+
+  const result = await checkAvailabiitySercices.viewBookingsByUserIntoDB(user)
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Bookings retrieved successfully',
+    data: result,
+  });
+});
 const creatBookings = catchAsync(async (req, res) => {
   const user = req.user;
 
@@ -42,4 +54,5 @@ export const checkAvailabilityControler = {
   checkAvailability,
   creatBookings,
   getAllBookings,
+  viewBookingsByUser
 };

@@ -11,6 +11,7 @@ const loginUser = async (payLoad: TLoginUser) => {
   // checking if the user is exist
   const user = await User.findOne({ email });
 
+
   // console.log(await User.isUserExistsByCustomId(payLoad.id));
 
   if (!user) {
@@ -29,6 +30,7 @@ const loginUser = async (payLoad: TLoginUser) => {
   const jwtPayload = {
     email: user?.email,
     role: user?.role,
+    _id:user?._id
   };
   const accesToken = jwt.sign(jwtPayload, config.JWT_ACCESS_SECRATE as string, {
     expiresIn: "20d",
