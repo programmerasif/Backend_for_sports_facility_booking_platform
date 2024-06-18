@@ -13,7 +13,22 @@ const checkAvailability = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const creatBookings = catchAsync(async (req, res) => {
+  const user = req.user;
+
+  const result = await checkAvailabiitySercices.creatBookingsIntoDB(
+    req.body,
+    user,
+  );
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Booking created successfully',
+    data: result,
+  });
+});
 
 export const checkAvailabilityControler = {
   checkAvailability,
+  creatBookings,
 };

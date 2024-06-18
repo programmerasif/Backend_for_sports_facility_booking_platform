@@ -35,7 +35,6 @@ const loginUser = async (payLoad: TLoginUser) => {
   });
 
   return {
-    //   needsPasswordChange:user?.needsPasswordChange,
       accesToken
   };
 };
