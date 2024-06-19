@@ -17,7 +17,7 @@ const handeDuplicatedError = (err:any) : TGenericErrorResponse =>{
     const statusCode = 400
     return{
         statusCode,
-        message : 'Invalid ID Error',
+        message : `duplicate key error ${extractedMessage} is already exists`,
         errorSources 
       }
 }
