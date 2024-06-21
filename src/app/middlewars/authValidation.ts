@@ -29,7 +29,6 @@ const auth = (...requerdRoles: TRole[]) => {
           throw new AppError(httpStatus.UNAUTHORIZED,'You have no access to this route')
          }
         req.user = decoded as JwtPayload;
-        console.log(req.user);
       },
     );
     next();

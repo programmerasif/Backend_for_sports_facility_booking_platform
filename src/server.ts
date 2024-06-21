@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import app from './app';
 import config from './app/config';
 import { Server } from 'http';
@@ -13,13 +14,12 @@ async function main() {
       console.log(`Example app listening on port ${config.port}`);
     });
   } catch (error : any) {
-    console.log(error);
     throw new Error(error)
   }
 }
 main();
 process.on('unhandledRejection', () => {
-  console.log(`😈 unahandledRejection is detected , shutting down ...`);
+  console.log(`Unahandled Rejection is detected , shutting down ...`);
   if (server) {
     server.close(() => {
       process.exit(1);
@@ -29,6 +29,6 @@ process.on('unhandledRejection', () => {
 });
 
 process.on('uncaughtException', () => {
-  console.log(`😈 uncaughtException is detected , shutting down ...`);
+  console.log(`Uncaught Exception is detected , shutting down ...`);
   process.exit(1);
 });

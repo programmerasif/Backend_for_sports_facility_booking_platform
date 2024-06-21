@@ -1,4 +1,5 @@
-import { Schema, Types, model } from "mongoose";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Schema, model } from "mongoose";
 import { TBooking } from "./bookingModel.interface";
 
 

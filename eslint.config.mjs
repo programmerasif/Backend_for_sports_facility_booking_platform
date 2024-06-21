@@ -5,7 +5,6 @@ import tseslint from 'typescript-eslint';
 export default [
   {
     languageOptions: {
-      parser: parser,
       globals: {
         ...globals.browser,
         process: 'readonly', // Define process as a global variable here
@@ -19,15 +18,8 @@ export default [
       'prefer-const': 'error',
       'no-unused-expressions': 'error',
       'no-undef': 'error',
+      "@typescript-eslint/no-explicit-any": "off",
     },
-    globals: {
-      process: 'readonly',
-    },
-    extends: [
-      'eslint:recommended',
-      'plugin:@typescript-eslint/recommended',
-      'prettier',
-    ],
   },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,

@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from 'http-status';
-import { checkAvailability } from './booking.utils';
+import { checkAvailability, findAvailableSlots } from './booking.utils';
 import AppError from '../../errors/appError';
 import { Facility } from '../Facility/facility.model';
 import { User } from '../user/user.model';
@@ -18,18 +19,19 @@ const checkAvailabilTimeIntoDB = async (payLoad: any) => {
     date = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
   }
 
-  const isTimeAvailable = await checkAvailability(date);
-
-  if (!isTimeAvailable) {
-    throw new AppError(httpStatus.BAD_REQUEST, 'Time slot is not avail able');
-  }
-
-  return isTimeAvailable;
+  const result = await findAvailableSlots(date, 2);
+  return result;
 };
+
 const creatBookingsIntoDB = async (payLoad: any, userData: JwtPayload) => {
   const { facility, date, startTime, endTime } = payLoad;
-  // Parse startTime and endTime into Date objects
-  // Parse startTime and endTime into Date objects
+
+  // chacking if the time is available or nopt
+  const isTimeAvailable = await checkAvailability(date, startTime, endTime);
+
+  if (!isTimeAvailable) {
+    throw new AppError(httpStatus.NOT_FOUND, 'Requested time is not available');
+  }
   const startDateTime = new Date(`2002-01-01T${startTime}:00Z`);
   const endDateTime = new Date(`2002-01-01T${endTime}:00Z`);
   const facilityDetails = await Facility.findById(facility);
@@ -58,7 +60,6 @@ const creatBookingsIntoDB = async (payLoad: any, userData: JwtPayload) => {
   return result;
 };
 const viewBookingsByUserIntoDB = async (userData: JwtPayload) => {
-
   const user = await User.findOne({ email: userData.email });
   const _id = user?._id?.toHexString();
 

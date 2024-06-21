@@ -12,7 +12,7 @@ import handeDuplicatedError from '../errors/handeDuplicatedError';
 import AppError from '../errors/appError';
 import ValidationError from '../errors/validationError';
 
-let globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
+const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   // seting default value
   let statusCode = err.statusCode || 500;
   let message = err.message || 'Something went wrong!';
