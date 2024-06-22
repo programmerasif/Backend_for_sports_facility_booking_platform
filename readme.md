@@ -1,6 +1,6 @@
 Project name 
 **Sports Facility Booking Platform**
-[base url ](https://backend-for-sports-facility-booking-platform.vercel.app/)
+[ Project link : base url ](https://backend-for-sports-facility-booking-platform.vercel.app/)
 The Sports Facility Booking Platform streamlines the process of booking sports facilities, making it easy for users to sign up, log in, check availability, and manage their bookings. Admins have additional capabilities to add, update, and delete facilities, as well as view all bookings. The backend is built using TypeScript, Express.js, and Mongoose for MongoDB. Key features include user authentication, role-based access control, automatic calculation of booking costs, and comprehensive error handling.
 
 The API endpoints support various operations: users can sign up and log in via /api/auth/signup and /api/auth/login. Admins manage facilities through endpoints like POST /api/facility, PUT /api/facility/:id, and DELETE /api/facility/:id, while all users can check facility availability with GET /api/check-availability and create bookings with POST /api/bookings. The platform's design prioritizes security, efficiency, and user convenience, making sports facility booking hassle-free.
