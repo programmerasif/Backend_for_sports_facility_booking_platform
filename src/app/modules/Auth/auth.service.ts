@@ -2,7 +2,7 @@ import httpStatus from 'http-status';
 import AppError from '../../errors/appError';
 import { User } from '../user/user.model';
 import { TLoginUser } from './auth.interface';
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
 import config from '../../config';
 
 const loginUser = async (payLoad: TLoginUser) => {
@@ -10,7 +10,6 @@ const loginUser = async (payLoad: TLoginUser) => {
   // here we are chacking the user id from data base
   // checking if the user is exist
   const user = await User.findOne({ email });
-
 
   // console.log(await User.isUserExistsByCustomId(payLoad.id));
 
@@ -23,21 +22,22 @@ const loginUser = async (payLoad: TLoginUser) => {
   if (isDeletedUser) {
     throw new AppError(httpStatus.FORBIDDEN, `This users is Deleted`);
   }
-  
+
   if (user.password !== password) {
     throw new AppError(httpStatus.FORBIDDEN, 'Password do not matched');
   }
   const jwtPayload = {
     email: user?.email,
     role: user?.role,
-    _id:user?._id
+    _id: user?._id,
   };
   const accesToken = jwt.sign(jwtPayload, config.JWT_ACCESS_SECRATE as string, {
-    expiresIn: "20d",
+    expiresIn: '20d',
   });
 
   return {
-      accesToken
+    accesToken,
+    user,
   };
 };
 

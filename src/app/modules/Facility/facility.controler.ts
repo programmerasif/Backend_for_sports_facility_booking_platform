@@ -15,9 +15,9 @@ const creatFacility = catchAsync(async (req, res) => {
 });
 
 const updateFacility = catchAsync(async (req, res) => {
-  const {id} = req.params
-  const {...updateData} = req.body
-  const result = await FacalityServices.updateFacilityIntoDB(id,updateData);
+  const { id } = req.params;
+  const { ...updateData } = req.body;
+  const result = await FacalityServices.updateFacilityIntoDB(id, updateData);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -27,25 +27,31 @@ const updateFacility = catchAsync(async (req, res) => {
   });
 });
 const deleteFacility = catchAsync(async (req, res) => {
-  const {id} = req.params
-  
-  const result = await FacalityServices.deleteFacilityIntoDB(id);
+  const { id } = req.params;
 
+  const result = await FacalityServices.deleteFacilityIntoDB(id);
+  const sendData = {
+    _id: result._id,
+    name: result.name,
+    description: result.description,
+    pricePerHour: result.pricePerHour,
+    location: result.location,
+    isDeleted: result.isDeleted,
+  };
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Updated outdoor tennis court with synthetic surface.',
-    data: result,
+    data: sendData,
   });
 });
 const getAllFacility = catchAsync(async (req, res) => {
-  
   const result = await FacalityServices.getAllFacilityIntoDB();
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Updated outdoor tennis court with synthetic surface.',
+    message: 'Facilities retrieved successfully',
     data: result,
   });
 });
@@ -54,5 +60,5 @@ export const FacilityControler = {
   creatFacility,
   updateFacility,
   deleteFacility,
-  getAllFacility
+  getAllFacility,
 };
