@@ -114,6 +114,7 @@ export const findAvailableSlots = async (
               (parseInt(booking.endTime) + 1).toString().padStart(2, '0') +
               ':00',
           };
+          
           availableSlots.push(oddSlot);
         }
 

@@ -3,7 +3,15 @@ import { Facility } from './facility.model';
 
 const creatFacilityIntoDB = async (payLoad: TFacility) => {
   const result = await Facility.create(payLoad);
-  return result;
+  const resData = {
+    _id: result._id,
+    name: result.name,
+    description: result.description,
+    pricePerHour: result.pricePerHour,
+    location: result.location,
+    isDeleted: result.isDeleted
+  }
+  return resData;
 };
 const updateFacilityIntoDB = async (
   id: string,
@@ -17,7 +25,15 @@ const updateFacilityIntoDB = async (
     runValidators: true,
     upsert: true,
   });
-  return result;
+  const respData = {
+    _id: result._id,
+    name: result.name,
+    description: result.description,
+    pricePerHour:result.pricePerHour,
+    location: result.location,
+    isDeleted: result.isDeleted
+  }
+  return respData;
 };
 const deleteFacilityIntoDB = async (
   id: string,

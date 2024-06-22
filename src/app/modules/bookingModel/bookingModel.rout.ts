@@ -20,5 +20,7 @@ rout.get(
     auth('user'),
     checkAvailabilityControler.viewBookingsByUser,
   );
+  rout.delete('/bookings/:id', auth('user'), checkAvailabilityControler.cancelBooking);
+
 
 export const ChackAvailityRoutes = rout;

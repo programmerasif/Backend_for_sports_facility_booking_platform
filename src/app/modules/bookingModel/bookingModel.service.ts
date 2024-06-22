@@ -66,10 +66,32 @@ const viewBookingsByUserIntoDB = async (userData: JwtPayload) => {
   const allBookings = await Booking.find({ user: _id }).populate('facility');
   return allBookings;
 };
-
+const cancelBookingIntoDB = async (id: string) => {
+  const result = await Booking.findByIdAndUpdate(
+    { _id: id },
+    { isBooked: 'canceled' },
+    {
+      new: true,
+      runValidators: true,
+      upsert: true,
+    },
+  ).populate('facility');
+  const resData = {
+    _id: result._id,
+    facility: result.facility,
+    date: result.date,
+    startTime: result.startTime,
+    endTime: result.endTime,
+    user: result.user,
+    payableAmount: result.payableAmount,
+    isBooked: result.isBooked,
+  };
+  return resData;
+};
 export const checkAvailabiitySercices = {
   checkAvailabilTimeIntoDB,
   creatBookingsIntoDB,
   getAllBookingsIntoDB,
   viewBookingsByUserIntoDB,
+  cancelBookingIntoDB,
 };

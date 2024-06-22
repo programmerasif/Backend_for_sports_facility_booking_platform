@@ -49,9 +49,21 @@ const creatBookings = catchAsync(async (req, res) => {
   });
 });
 
+const cancelBooking = catchAsync(async (req, res) => {
+  const {id} = req.params
+  const result = await checkAvailabiitySercices.cancelBookingIntoDB(id);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Booking cancelled successfully',
+    data: result,
+  });
+});
 export const checkAvailabilityControler = {
   checkAvailability,
   creatBookings,
   getAllBookings,
   viewBookingsByUser,
+  cancelBooking
 };

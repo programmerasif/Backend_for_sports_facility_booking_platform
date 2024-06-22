@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import { UserRoutes } from '../modules/user/user.route';
 import { AuthRoutes } from '../modules/Auth/auth.rout';
 import { FacilityRoutes } from '../modules/Facility/facility.rout';
 import { ChackAvailityRoutes } from '../modules/bookingModel/bookingModel.rout';
@@ -7,10 +6,10 @@ import { ChackAvailityRoutes } from '../modules/bookingModel/bookingModel.rout';
 const route = Router();
 
 const moduleRouts = [
-  {
-    path: '/user',
-    route: UserRoutes,
-  },
+  // {
+  //   path: '/user',
+  //   route: UserRoutes,
+  // },
   {
     path: '/auth',
     route: AuthRoutes,

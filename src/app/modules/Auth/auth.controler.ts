@@ -8,7 +8,7 @@ const loginUser = catchAsync(async (req, res) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Admin is retrieved succesfully',
+    message: 'User logged in successfully',
     data: result,
   });
 });
