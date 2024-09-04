@@ -4,6 +4,7 @@ import valideteRequest from '../../middlewars/valideteRequest';
 import { loginValidationSchema } from './auth.validation';
 import { userValidationSchema } from '../user/user.validation';
 import { usersControler } from '../user/user.controler';
+import auth from '../../middlewars/authValidation';
 const router = express.Router();
 
 
@@ -13,8 +14,14 @@ router.post(
     AuthControler.loginUser,
   );
   router.post(
-    '/signup',
+    '/userSignup',
     valideteRequest(userValidationSchema),
     usersControler.creatUser
+  );
+  router.post(
+    '/adminSignup',
+    auth('admin'),
+    valideteRequest(userValidationSchema),
+    usersControler.createAdmin
   );
   export const AuthRoutes = router;

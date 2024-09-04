@@ -36,6 +36,11 @@ const userSchema = new Schema<TUser>({
         required: true,
         trim: true
     },
+    image:{
+        type: String,
+        required: true,
+        trim: true
+    },
     isDeleted:{
         type: Boolean,
         default: false,

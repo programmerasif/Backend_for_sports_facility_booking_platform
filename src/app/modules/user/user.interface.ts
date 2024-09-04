@@ -8,4 +8,5 @@ export interface TUser {
     role: TRole;
     address: string;
     isDeleted: boolean
+    image:string
 }

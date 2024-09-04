@@ -4,9 +4,6 @@ import catchAsync from '../../utils/catchAsync';
 import { userServices } from './user.service';
 
 const creatUser = catchAsync(async (req, res) => {
-//   const { user } = req.body;
-// console.log(req.body);
-
   const result = await userServices.creatUserIntoDB(req.body);
 
   sendResponse(res, {
@@ -16,7 +13,18 @@ const creatUser = catchAsync(async (req, res) => {
     data: result,
   });
 });
+const createAdmin = catchAsync(async (req, res) => {
+  const result = await userServices.createAdminIntoDB(req.body);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Admin registered successfully',
+    data: result,
+  });
+});
 
 export const usersControler = {
   creatUser,
+  createAdmin
 };
