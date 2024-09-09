@@ -46,7 +46,7 @@ const deleteFacility = catchAsync(async (req, res) => {
   });
 });
 const getAllFacility = catchAsync(async (req, res) => {
-  const result = await FacalityServices.getAllFacilityIntoDB();
+  const result = await FacalityServices.getAllFacilityIntoDB(req.query);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

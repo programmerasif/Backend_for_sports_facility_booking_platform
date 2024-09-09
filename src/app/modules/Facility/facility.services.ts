@@ -1,3 +1,4 @@
+import QueryBuilder from '../../builders/BuildersQuery';
 import { TFacility } from './facility.interface';
 import { Facility } from './facility.model';
 
@@ -48,9 +49,28 @@ const deleteFacilityIntoDB = async (
   return result;
 };
 
-const getAllFacilityIntoDB = async () => {
-  const result = await Facility.find();
-  return result;
+const getAllFacilityIntoDB = async (query: Record<string, unknown>) => {
+  try {
+  
+    
+    const searchableFields = ['name', 'price'];
+    const productQuery = new QueryBuilder(Facility.find(), query)
+      .search(searchableFields)
+      .filter()
+      .paginate()
+      .fields();
+
+    const  facility = await productQuery.modelQuery;
+    const paginationInfo = await productQuery.countTotal();
+
+    return {
+      facility,
+      hasMore: paginationInfo?.hasMore,
+      paginationInfo,
+    };
+  } catch (error) {
+    throw new Error(`Failed to get facilities: ${error.message}`);
+  }
 };
 export const FacalityServices = {
   creatFacilityIntoDB,
