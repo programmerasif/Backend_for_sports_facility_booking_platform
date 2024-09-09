@@ -6,11 +6,44 @@ import { Facility } from '../Facility/facility.model';
 import { User } from '../user/user.model';
 import { Booking } from './bookingModel.model';
 import { JwtPayload } from 'jsonwebtoken';
+import QueryBuilder from '../../builders/BuildersQuery';
 
-const getAllBookingsIntoDB = async () => {
-  const result = await Booking.find().populate('user').populate('facility');
+// const getAllBookingsIntoDB = async () => {
+//   const result = await Booking.find().populate('user').populate('facility');
 
-  return result;
+//   return result;
+// };
+const getAllBookingsIntoDB = async (query: Record<string, unknown>) => {
+
+  try {
+  
+    
+    const searchableFields = ['name', 'price'];
+
+    // Start with Booking query and add the populate clauses
+    const baseQuery = Booking.find().populate('user').populate('facility');
+
+    const productQuery = new QueryBuilder(baseQuery, query)
+      .search(searchableFields)
+      .filter()
+      .paginate()
+      .fields();
+
+    // Execute the query after chaining
+    const facility = await productQuery.modelQuery.exec();
+
+    // Get pagination information
+    const paginationInfo = await productQuery.countTotal();
+
+    return {
+      facility,
+      hasMore: paginationInfo?.hasMore,
+      paginationInfo,
+    };
+  } catch (error) {
+    throw new Error(`Failed to get facilities: ${error.message}`);
+  }
+
 };
 const checkAvailabilTimeIntoDB = async (payLoad: any) => {
   let date = payLoad;

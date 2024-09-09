@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express';
-
 import httpStatus from 'http-status';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import catchAsync from '../utils/catchAsync';
@@ -7,33 +6,32 @@ import AppError from '../errors/appError';
 import config from '../config';
 import { TRole } from '../modules/user/user.interface';
 
-const auth = (...requerdRoles: TRole[]) => {
+const auth = (...requiredRoles: TRole[]) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const authorization = req.headers.authorization;
-    const token = authorization;
-
-    if (!token) {
-      throw new AppError(httpStatus.UNAUTHORIZED, 'You have no access to this route 1');
+    if (!authorization) {
+      throw new AppError(httpStatus.UNAUTHORIZED, 'No token provided.');
     }
 
-    jwt.verify(
-      token,
-      config.JWT_ACCESS_SECRATE as string,
-      function (err, decoded) {
-        // if (err) {
-        //   console.log(err);
-          
-        //   throw new AppError(httpStatus.UNAUTHORIZED, 'You have no access to this route 2');
-        // }
+    const token = authorization.split(' ')[1]; // Bearer token format
 
-          const role = (decoded as JwtPayload).role
-         if (requerdRoles && !requerdRoles.includes(role)) {
-          throw new AppError(httpStatus.UNAUTHORIZED,'You have no access to this route 3')
-         }
-        req.user = decoded as JwtPayload;
-      },
-    );
-    next();
+    jwt.verify(token, config.JWT_ACCESS_SECRATE as string, (err, decoded) => {
+      if (err) {
+        return next(new AppError(httpStatus.UNAUTHORIZED, 'Invalid token.'));
+      }
+
+      const userRole = (decoded as JwtPayload).role;
+      
+      // Check if the user has the required role
+      if (requiredRoles.length > 0 && !requiredRoles.includes(userRole as TRole)) {
+        return next(new AppError(httpStatus.FORBIDDEN, 'You do not have permission to access this route.'));
+      }
+
+      // Attach the decoded token to the request object for further use
+      req.user = decoded as JwtPayload;
+      next(); // Proceed to the next middleware or route handler
+    });
   });
 };
+
 export default auth;

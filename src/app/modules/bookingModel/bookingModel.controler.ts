@@ -4,7 +4,7 @@ import sendResponse from '../../utils/sendResponse';
 import { checkAvailabiitySercices } from './bookingModel.service';
 
 const getAllBookings = catchAsync(async (req, res) => {
-  const result = await checkAvailabiitySercices.getAllBookingsIntoDB();
+  const result = await checkAvailabiitySercices.getAllBookingsIntoDB(req.query);
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
