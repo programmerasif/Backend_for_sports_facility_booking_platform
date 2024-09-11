@@ -24,8 +24,13 @@ rout.delete(
     FacilityControler.deleteFacility,
   );
 rout.get(
+    '/:id',
+    FacilityControler.getSingleFacility,
+  );
+rout.get(
     '/',
     FacilityControler.getAllFacility,
   );
+
 
 export const FacilityRoutes = rout;

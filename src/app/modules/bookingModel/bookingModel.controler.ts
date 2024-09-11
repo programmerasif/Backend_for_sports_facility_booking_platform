@@ -14,8 +14,9 @@ const getAllBookings = catchAsync(async (req, res) => {
 });
 
 const checkAvailability = catchAsync(async (req, res) => {
+  const {id} = req.params
   const { date } = req.query;
-  const result = await checkAvailabiitySercices.checkAvailabilTimeIntoDB(date);
+  const result = await checkAvailabiitySercices.checkAvailabilTimeIntoDB({date,id});
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

@@ -22,9 +22,10 @@ export const checkAvailability = async (
   date: YYYYMMDD,
   startTime: HHMM,
   endTime: HHMM,
+  facility:string
 ) => {
 
-  const bookings = await Booking.find({ date, isBooked: 'confirmed' });
+  const bookings = await Booking.find({ date,facility, isBooked: 'confirmed' });
 
   const isSlotAvailable = (
     startTime: string,
@@ -53,8 +54,9 @@ export const checkAvailability = async (
 export const findAvailableSlots = async (
   date: string,
   slotDuration: number = 3,
+  facility:string
 ) => {
-  const bookings = await Booking.find({ date, isBooked: 'confirmed' });
+  const bookings = await Booking.find({ date,facility, isBooked: 'confirmed' });
 
   // Generate all possible time slots for the day
   const allSlots = generateTimeSlots(slotDuration);

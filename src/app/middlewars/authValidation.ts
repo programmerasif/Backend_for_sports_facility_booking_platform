@@ -13,8 +13,9 @@ const auth = (...requiredRoles: TRole[]) => {
       throw new AppError(httpStatus.UNAUTHORIZED, 'No token provided.');
     }
 
-    const token = authorization.split(' ')[1]; // Bearer token format
-
+    const token = authorization; 
+    
+    
     jwt.verify(token, config.JWT_ACCESS_SECRATE as string, (err, decoded) => {
       if (err) {
         return next(new AppError(httpStatus.UNAUTHORIZED, 'Invalid token.'));

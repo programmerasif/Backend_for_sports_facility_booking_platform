@@ -19,7 +19,7 @@ const updateFacilityIntoDB = async (
   payLoad: Partial<TFacility>,
 ) => {
   const { ...updateData } = payLoad;
-  
+
 
   const result = await Facility.findOneAndUpdate({ _id: id }, updateData, {
     new: true,
@@ -72,9 +72,18 @@ const getAllFacilityIntoDB = async (query: Record<string, unknown>) => {
     throw new Error(`Failed to get facilities: ${error.message}`);
   }
 };
+
+
+const getSingleFacilityIntoDB = async(_id:string) =>{ 
+  
+  
+  const result = await Facility.findById(_id)
+  return result
+}
 export const FacalityServices = {
   creatFacilityIntoDB,
   updateFacilityIntoDB,
   deleteFacilityIntoDB,
-  getAllFacilityIntoDB
+  getAllFacilityIntoDB,
+  getSingleFacilityIntoDB
 };

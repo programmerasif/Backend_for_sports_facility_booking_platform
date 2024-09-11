@@ -24,4 +24,9 @@ router.post(
     valideteRequest(userValidationSchema),
     usersControler.createAdmin
   );
+  router.get(
+    '/',
+    auth('admin'),
+    usersControler.getUsers
+  );
   export const AuthRoutes = router;

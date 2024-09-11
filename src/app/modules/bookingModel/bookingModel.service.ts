@@ -8,11 +8,7 @@ import { Booking } from './bookingModel.model';
 import { JwtPayload } from 'jsonwebtoken';
 import QueryBuilder from '../../builders/BuildersQuery';
 
-// const getAllBookingsIntoDB = async () => {
-//   const result = await Booking.find().populate('user').populate('facility');
 
-//   return result;
-// };
 const getAllBookingsIntoDB = async (query: Record<string, unknown>) => {
 
   try {
@@ -46,21 +42,22 @@ const getAllBookingsIntoDB = async (query: Record<string, unknown>) => {
 
 };
 const checkAvailabilTimeIntoDB = async (payLoad: any) => {
-  let date = payLoad;
+  const facilityId = payLoad?.id
+  let date = payLoad?.date;
 
   if (!date) {
-    date = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
+    date = new Date().toISOString().split('T')[0]; 
   }
 
-  const result = await findAvailableSlots(date, 2);
+  const result = await findAvailableSlots(date, 2,facilityId);
   return result;
 };
 
 const creatBookingsIntoDB = async (payLoad: any, userData: JwtPayload) => {
-  const { facility, date, startTime, endTime } = payLoad;
+  const { facility, date, startTime, endTime} = payLoad;
 
-  // chacking if the time is available or nopt
-  const isTimeAvailable = await checkAvailability(date, startTime, endTime);
+  // chacking if the time is available or not 
+  const isTimeAvailable = await checkAvailability(date, startTime, endTime,facility);
 
   if (!isTimeAvailable) {
     throw new AppError(httpStatus.NOT_FOUND, 'Requested time is not available');

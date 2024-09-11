@@ -6,7 +6,7 @@ import { bookingValidationSchema } from './bookingModel.validation';
 
 const rout = express.Router();
 
-rout.get('/check-availability', checkAvailabilityControler.checkAvailability);
+rout.get('/check-availability/:id', checkAvailabilityControler.checkAvailability);
 rout.post(
   '/bookings',
   auth('user'),
