@@ -21,6 +21,7 @@ rout.get(
     checkAvailabilityControler.viewBookingsByUser,
   );
   rout.delete('/bookings/:id', auth('user'), checkAvailabilityControler.cancelBooking);
+  rout.post('/checkSlotAvailableOrNot', checkAvailabilityControler.checkSlotAvailableOrNot);
 
 
 export const ChackAvailityRoutes = rout;

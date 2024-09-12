@@ -9,5 +9,9 @@ export default {
   port: process.env.PORT,
   database_url: process.env.DATABASE_URL,
   default_pass:process.env.DEFAULT_PASS,
-  JWT_ACCESS_SECRATE:process.env.JWT_ACCESS_SECRATE
+  JWT_ACCESS_SECRATE:process.env.JWT_ACCESS_SECRATE,
+  SIGNATURE_KEY:process.env.SIGNATURE_KEY,
+  STORE_ID:process.env.STORE_ID,
+  PAYMENTUEL:process.env.PAYMENTUEL,
+
 }

@@ -7,6 +7,8 @@ import { User } from '../user/user.model';
 import { Booking } from './bookingModel.model';
 import { JwtPayload } from 'jsonwebtoken';
 import QueryBuilder from '../../builders/BuildersQuery';
+import { initialPayment } from '../Payment/Payment.utils';
+
 
 
 const getAllBookingsIntoDB = async (query: Record<string, unknown>) => {
@@ -37,7 +39,7 @@ const getAllBookingsIntoDB = async (query: Record<string, unknown>) => {
       paginationInfo,
     };
   } catch (error) {
-    throw new Error(`Failed to get facilities: ${error.message}`);
+    throw new Error(`Failed to get facilities: ${error}`);
   }
 
 };
@@ -54,14 +56,15 @@ const checkAvailabilTimeIntoDB = async (payLoad: any) => {
 };
 
 const creatBookingsIntoDB = async (payLoad: any, userData: JwtPayload) => {
-  const { facility, date, startTime, endTime} = payLoad;
+  const { facility, date, startTime, endTime } = payLoad;
 
-  // chacking if the time is available or not 
-  const isTimeAvailable = await checkAvailability(date, startTime, endTime,facility);
+  // chacking if the time is available or not
+  const isTimeAvailable = await checkAvailability(date, startTime, endTime, facility);
 
   if (!isTimeAvailable) {
     throw new AppError(httpStatus.NOT_FOUND, 'Requested time is not available');
   }
+
   const startDateTime = new Date(`2002-01-01T${startTime}:00Z`);
   const endDateTime = new Date(`2002-01-01T${endTime}:00Z`);
   const facilityDetails = await Facility.findById(facility);
@@ -72,9 +75,20 @@ const creatBookingsIntoDB = async (payLoad: any, userData: JwtPayload) => {
     throw new AppError(httpStatus.NOT_FOUND, 'Facility not found ');
   }
 
-  const durationHours =
-    (endDateTime.getTime() - startDateTime.getTime()) / (1000 * 60 * 60);
+  const durationHours = (endDateTime.getTime() - startDateTime.getTime()) / (1000 * 60 * 60);
   const payableAmount = durationHours * facilityDetails.pricePerHour;
+
+  const paymentData = {
+    payableAmount,
+    customerName: userObjId?.name,
+    customerEmail: userData?.email,
+    customerPhone: userObjId?.phone,
+    customerAddress: userObjId?.address,
+  };
+
+  const paymentStatus = await initialPayment(paymentData);
+
+  console.log(paymentStatus, "line89");
 
   const bookingData = {
     facility,
@@ -87,14 +101,45 @@ const creatBookingsIntoDB = async (payLoad: any, userData: JwtPayload) => {
   };
 
   const result = await Booking.create(bookingData);
-  return result;
+
+  return {
+    result,
+    paymentStatus,
+  };
 };
-const viewBookingsByUserIntoDB = async (userData: JwtPayload) => {
+const viewBookingsByUserIntoDB = async (query: Record<string, unknown>,userData: JwtPayload) => {
   const user = await User.findOne({ email: userData.email });
   const _id = user?._id?.toHexString();
 
-  const allBookings = await Booking.find({ user: _id }).populate('facility');
-  return allBookings;
+  
+  try {
+  
+    
+    const searchableFields = ['name', 'price'];
+
+    // Start with Booking query and add the populate clauses
+    const baseQuery = Booking.find({ user: _id }).populate('facility');
+
+    const productQuery = new QueryBuilder(baseQuery, query)
+      .search(searchableFields)
+      .filter()
+      .paginate()
+      .fields();
+
+    // Execute the query after chaining
+    const facility = await productQuery.modelQuery.exec();
+
+    // Get pagination information
+    const paginationInfo = await productQuery.countTotal();
+
+    return {
+      facility,
+      hasMore: paginationInfo?.hasMore,
+      paginationInfo,
+    };
+  } catch (error) {
+    throw new Error(`Failed to get facilities: ${error}`);
+  }
 };
 const cancelBookingIntoDB = async (id: string) => {
   const result = await Booking.findByIdAndUpdate(
@@ -118,10 +163,17 @@ const cancelBookingIntoDB = async (id: string) => {
   };
   return resData;
 };
+const isSlotAvailAbleOrNotIntoDB = async (payLoad: { date: any; startTime: any; endTime: any; facility: any; }) => {
+  const {date, startTime, endTime,facility} = payLoad
+  const isTimeAvailable = await checkAvailability(date, startTime, endTime,facility);
+  return isTimeAvailable
+  
+};
 export const checkAvailabiitySercices = {
   checkAvailabilTimeIntoDB,
   creatBookingsIntoDB,
   getAllBookingsIntoDB,
   viewBookingsByUserIntoDB,
   cancelBookingIntoDB,
+  isSlotAvailAbleOrNotIntoDB
 };
